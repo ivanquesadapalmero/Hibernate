@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//hibernate/Hibernate Cofiguration DTD 3.0//EN"
+		"http://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+	
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.connection.driver_class">net.sourceforge.jtds.jdbc.Driver</property>
+		<property name="hibernate.connection.url">jdbc:jtds:sqlserver://MVFORMACION:1433/HIBERNATE</property>
+		<property name="hibernate.connection.user">sa</property>
+		<property name="hibernate.connection.password">Temporal22</property>
+		<property name="hibernate.connection.pool_size">2</property>
+		
+		<property name="hibernate.current_session_context_class">thread</property>
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
+<!-- 		<property name="hibernate.cache.use_query_cache">true</property> -->
+<!-- 		<property name="hibernate.cache.region.factory_class">org.hibernate.cache.jcache.JCacheRegionFactory</property> -->
+		<property name="hibernate.hbm2ddl.auto">none</property>
+		
+		
+		<mapping class="es.fpdual.hibernate.hibernate.modelo.Persona"/>
+		<mapping class="es.fpdual.hibernate.hibernate.modelo.Vehiculo"/>
+	</session-factory>
+</hibernate-configuration>		
