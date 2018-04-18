@@ -188,6 +188,7 @@ public class RepositorioPersona {
 			throw new RuntimeException(e);
 		} finally {
 			sesion.close();
+			// hola
 		}
 	}
 
