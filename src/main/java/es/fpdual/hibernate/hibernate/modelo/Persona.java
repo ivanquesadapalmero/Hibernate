@@ -1,22 +1,30 @@
 package es.fpdual.hibernate.hibernate.modelo;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "A_PER")
-public class Persona implements Serializable {
+public class Persona extends Usuario {
 
-	@Id
-	@GeneratedValue
-	@Column(name = "PER_ID")
-	private int idPersona;
+	@ManyToMany(cascade = { CascadeType.ALL })
+	private List<Direccion> direcciones = new ArrayList<>();
+
+	@OneToMany(mappedBy = "persona", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Telefono> telefonos = new ArrayList<>();
+
+	@OneToOne(mappedBy = "persona", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private DetallePersona detalles;
 
 	@Column(name = "PER_NOM", nullable = false, length = 50)
 	private String nombre;
@@ -37,12 +45,12 @@ public class Persona implements Serializable {
 	public Persona() {
 	}
 
-	public int getIdPersona() {
-		return idPersona;
+	public List<Direccion> getDirecciones() {
+		return direcciones;
 	}
 
-	public void setIdPersona(int idPersona) {
-		this.idPersona = idPersona;
+	public List<Telefono> getTelefonos() {
+		return telefonos;
 	}
 
 	public String getNombre() {
@@ -85,4 +93,35 @@ public class Persona implements Serializable {
 		this.estadoCivil = estadoCivil;
 	}
 
+	public void añadirDireccion(Direccion direccion) {
+		direcciones.add(direccion);
+		direccion.getPersonas().add(this);
+	}
+
+	public void borrarDireccion(Direccion direccion) {
+		direcciones.remove(direccion);
+		direccion.getPersonas().remove(this);
+	}
+
+	public void añadirTelefono(Telefono telefono) {
+		telefonos.add(telefono);
+		telefono.setPersona(this);
+	}
+
+	public void eliminarTelefono(Telefono telefono) {
+		telefonos.remove(telefono);
+		telefono.setPersona(null);
+	}
+
+	public void añadirDetalle(DetallePersona detalle) {
+		detalles.setPersona(this);
+		this.detalles = detalle;
+	}
+
+	public void eliminarDetalle() {
+		if (detalles != null) {
+			detalles.setPersona(null);
+			this.detalles = null;
+		}
+	}
 }

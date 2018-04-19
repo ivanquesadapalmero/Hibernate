@@ -4,20 +4,21 @@ import java.util.List;
 
 import org.hibernate.Session;
 
+import es.fpdual.hibernate.hibernate.modelo.Cliente;
 import es.fpdual.hibernate.hibernate.modelo.EstadoCivil;
 import es.fpdual.hibernate.hibernate.modelo.Persona;
 import es.fpdual.hibernate.hibernate.util.HibernateUtil;
 
-public class RepositorioPersona {
+public class RepositorioCliente {
 
-	public static Integer crearPersona(final Persona persona) {
+	public static Integer crearCliente(final Cliente cliente) {
 		final Session sesion = HibernateUtil.getMiFactoria().getCurrentSession();
 
 		try {
 
 			sesion.beginTransaction();
 
-			final Integer idPersona = (Integer) sesion.save(persona);
+			final Integer idPersona = (Integer) sesion.save(cliente);
 
 			sesion.getTransaction().commit();
 
@@ -33,24 +34,21 @@ public class RepositorioPersona {
 		}
 	}
 
-	public static void modificarPersona(final Integer idPersona, final String nombre) {
+	public static void modificarCliente(final Integer idCliente, final String nombre) {
 
 		final Session sesion = HibernateUtil.getMiFactoria().getCurrentSession();
 
 		try {
 			sesion.beginTransaction();
 
-			final Persona personaBBDD = (Persona) sesion
-					.createQuery("from Usuario usuario where usuario.idUsuario = :identificador")
-					.setParameter("identificador", idPersona).uniqueResult();
-
-			personaBBDD.setNombre(nombre);
+			sesion.createQuery("Update Cliente set cli_nom = :nombre WHERE usu_id = :identificador")
+					.setParameter("nombre", nombre).setParameter("identificador", idCliente).executeUpdate();
 
 			sesion.getTransaction().commit();
 
 		} catch (Exception e) {
 
-			System.out.println("Se ha producido un error al modificar la persona: " + e.getMessage());
+			System.out.println("Se ha producido un error al modificar el cliente: " + e.getMessage());
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		} finally {
@@ -58,48 +56,20 @@ public class RepositorioPersona {
 		}
 	}
 
-	// public static void modificarPersona(final Integer idPersona, final String
-	// nombre) {
-	//
-	// final Session sesion = HibernateUtil.getMiFactoria().getCurrentSession();
-	//
-	// try {
-	// sesion.beginTransaction();
-	//
-	//
-	// final Persona personaBBDD = (Persona) sesion.createQuery("from Persona where
-	// PER_ID = :identificador")
-	// .setParameter("identificador", idPersona).uniqueResult();
-	//
-	// personaBBDD.setNombre(nombre);
-	//
-	// sesion.getTransaction().commit();
-	//
-	// } catch (Exception e) {
-	//
-	// System.out.println("Se ha producido un error al modificar la persona: " +
-	// e.getMessage());
-	// e.printStackTrace();
-	// throw new RuntimeException(e);
-	// } finally {
-	// sesion.close();
-	// }
-	// }
-
-	public static void modificarPersona(Persona persona) {
+	public static void modificarCliente(Cliente cliente) {
 
 		final Session sesion = HibernateUtil.getMiFactoria().getCurrentSession();
 
 		try {
 			sesion.beginTransaction();
 
-			sesion.saveOrUpdate(persona);
+			sesion.saveOrUpdate(cliente);
 
 			sesion.getTransaction().commit();
 
 		} catch (Exception e) {
 
-			System.out.println("Se ha producido un error al modificar la persona: " + e.getMessage());
+			System.out.println("Se ha producido un error al modificar el cliente: " + e.getMessage());
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		} finally {
@@ -107,14 +77,14 @@ public class RepositorioPersona {
 		}
 	}
 
-	public static void eliminarPersona(Integer idUsuario) {
+	public static void eliminarCliente(Integer idCliente) {
 
 		final Session sesion = HibernateUtil.getMiFactoria().getCurrentSession();
 
 		try {
 			sesion.beginTransaction();
 
-			sesion.createQuery("Delete Persona where usu_id = :identificador").setParameter("identificador", idUsuario)
+			sesion.createQuery("Delete Cliente where cli_id = :identificador").setParameter("identificador", idCliente)
 					.executeUpdate();
 
 			sesion.getTransaction().commit();
@@ -129,14 +99,14 @@ public class RepositorioPersona {
 		}
 	}
 
-	public static Persona consultaNombreCompleto(Integer idPersona) {
+	public static Persona consultaNombreCompleto(Integer idCliente) {
 		final Session sesion = HibernateUtil.getMiFactoria().getCurrentSession();
 
 		try {
 			sesion.beginTransaction();
 
-			return (Persona) sesion.createQuery("from Persona where per_id = :idPersona")
-					.setParameter("idPersona", idPersona).uniqueResult();
+			return (Persona) sesion.createQuery("from Cliente where cli_id = :idCliente")
+					.setParameter("idCliente", idCliente).uniqueResult();
 
 		} catch (Exception e) {
 			System.out.println("Se ha producido un error" + e.getMessage());
@@ -147,7 +117,7 @@ public class RepositorioPersona {
 		}
 	}
 
-	public static List<Persona> consulta(String nombre, String apellidos, String dni, EstadoCivil estadoCivil,
+	public static List<Cliente> consulta(String nombre, String apellidos, String dni, EstadoCivil estadoCivil,
 			String login) {
 		final Session sesion = HibernateUtil.getMiFactoria().getCurrentSession();
 
@@ -155,24 +125,24 @@ public class RepositorioPersona {
 
 			sesion.beginTransaction();
 
-			final StringBuilder sb = new StringBuilder("from Persona Where 1=1");
+			final StringBuilder sb = new StringBuilder("from Cliente Where 1=1");
 			if (!nombre.isEmpty()) {
-				sb.append("and PER_NOM like :nombre");
+				sb.append("and CLI_NOM like :nombre");
 			}
 			if (!apellidos.isEmpty()) {
-				sb.append("and PER_APE like :apellidos");
+				sb.append("and CLI_APE like :apellidos");
 			}
 			if (!dni.isEmpty()) {
-				sb.append("and PER_NOM like :nombre");
+				sb.append("and CLI_NOM like :nombre");
 			}
 			if (estadoCivil != null) {
-				sb.append("and PER_ECV = estadoCivil");
+				sb.append("and CLI_ECV = estadoCivil");
 			}
 			if (!login.isEmpty()) {
 				sb.append("and PER_LOG like :login");
 			}
 
-			final org.hibernate.query.Query<Persona> consulta = sesion.createQuery(sb.toString());
+			final org.hibernate.query.Query<Cliente> consulta = sesion.createQuery(sb.toString());
 
 			if (!nombre.isEmpty()) {
 				consulta.setParameter("nombre", nombre);
@@ -193,7 +163,7 @@ public class RepositorioPersona {
 			return consulta.list();
 
 		} catch (Exception e) {
-			System.out.println("Se ha producido un error al obtener a la persona" + e.getMessage());
+			System.out.println("Se ha producido un error al obtener el cliente" + e.getMessage());
 			sesion.getTransaction();
 			throw new RuntimeException(e);
 		} finally {

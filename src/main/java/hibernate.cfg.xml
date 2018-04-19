@@ -16,10 +16,14 @@
 		<property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
 <!-- 		<property name="hibernate.cache.use_query_cache">true</property> -->
 <!-- 		<property name="hibernate.cache.region.factory_class">org.hibernate.cache.jcache.JCacheRegionFactory</property> -->
-		<property name="hibernate.hbm2ddl.auto">none</property>
+		<property name="hibernate.hbm2ddl.auto">create</property>
 		
 		
 		<mapping class="es.fpdual.hibernate.hibernate.modelo.Persona"/>
+		<mapping class="es.fpdual.hibernate.hibernate.modelo.Cliente"/>
+		<mapping class="es.fpdual.hibernate.hibernate.modelo.Usuario"/>
+		<mapping class="es.fpdual.hibernate.hibernate.modelo.Direccion"/>
+		<mapping class="es.fpdual.hibernate.hibernate.modelo.Telefono"/>
 		<mapping class="es.fpdual.hibernate.hibernate.modelo.Vehiculo"/>
 	</session-factory>
 </hibernate-configuration>		

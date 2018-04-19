@@ -1,63 +1,135 @@
 package es.fpdual.hibernate.hibernate.pruebas;
 
+import java.util.Date;
+import java.util.List;
+
+import es.fpdual.hibernate.hibernate.modelo.Cliente;
+import es.fpdual.hibernate.hibernate.modelo.DetallePersona;
+import es.fpdual.hibernate.hibernate.modelo.Direccion;
 import es.fpdual.hibernate.hibernate.modelo.EstadoCivil;
 import es.fpdual.hibernate.hibernate.modelo.Persona;
+import es.fpdual.hibernate.hibernate.modelo.Telefono;
+import es.fpdual.hibernate.hibernate.repositorio.RepositorioCliente;
 import es.fpdual.hibernate.hibernate.repositorio.RepositorioPersona;
+import es.fpdual.hibernate.hibernate.repositorio.RepositorioUsuario;
 
 public class Pruebas {
 
 	public static void main(String[] args) {
+		//
+		crearPersona("00000000A", "persona");
+		// crearCliente("11111111B", "cliente");
 
-		System.out.println(crearPersona());
-		// System.out.println(crearVehiculo());
-		modificarPersona();
-		eliminarPersona();
-		modificarPersona2();
-		// System.out.println(obtenerNombrePersona(1));
-
-		// modificarVehiculo();
-		// modificarVehiculo2(2);
-		// eliminarVehiculo(2);
-
+		// crearCliente("33333333B", "cliente2");
+		//
+		// modificarPersona(1, "PersonaModificada");
+		// // modificarCliente();
+		//
+		// // consultaCliente("Iván", "Quesada", "%000%", EstadoCivil.CASADO,
+		// "persona");
+		// // consultaPersona("Iván", "Quesada", "%111%", EstadoCivil.CASADO,
+		// "cliente");
+		//
+		// eliminarUsuario(1);
+		// eliminarUsuario(2);
 	}
 
-	private static Integer crearPersona() {
+	private static Integer crearPersona(String dni, String login) {
 
 		final Persona persona = new Persona();
 		persona.setNombre("Iván");
 		persona.setApellidos("Quesada");
 		persona.setEdad(19);
 		persona.setEstadoCivil(EstadoCivil.CASADO);
-		persona.setDni("00000000K");
+		persona.setDni(dni);
+		persona.setLogin(login);
+		persona.setFechaAlta(new Date());
+		persona.setPassword("ivan");
+
+		final Direccion direccion1 = new Direccion();
+		direccion1.setProvincia("Sevilla");
+		direccion1.setCiudad("Écija");
+		direccion1.setCodigoPostal("41420");
+		direccion1.setCalle("Calle Metalurgia");
+		direccion1.setNumero(2);
+		// direccion1.setPersonas(Arrays.asList(persona));
+
+		final Telefono telefono1 = new Telefono();
+		telefono1.setNumero("999999999");
+
+		DetallePersona detalle1 = new DetallePersona();
+		detalle1.setHijos(false);
+		detalle1.setDeporte(true);
+		detalle1.setMascota(true);
+
+		persona.añadirTelefono(telefono1);
+		persona.añadirDireccion(direccion1);
+		persona.añadirTelefono(telefono1);
+		persona.añadirDetalle(detalle1);
 
 		return RepositorioPersona.crearPersona(persona);
 	}
 
-	private static void modificarPersona() {
-		RepositorioPersona.modificarPersona(1, "Iván");
+	private static Integer crearCliente(String dni, String login) {
+
+		final Cliente cliente = new Cliente();
+		cliente.setNombre("Iván");
+		cliente.setApellidos("Quesada");
+		cliente.setEdad(19);
+		cliente.setEstadoCivil(EstadoCivil.CASADO);
+		cliente.setDni(dni);
+		cliente.setLogin(login);
+		cliente.setFechaAlta(new Date());
+		cliente.setPassword("ivan");
+
+		return RepositorioCliente.crearCliente(cliente);
 	}
 
-	private static void modificarPersona2() {
-		final Persona persona2 = new Persona();
-		persona2.setIdPersona(1);
-		persona2.setNombre("Iván2");
-		persona2.setApellidos("Quesada2");
-		persona2.setEdad(192);
-		persona2.setEstadoCivil(EstadoCivil.CASADO);
-		persona2.setDni("00000000K");
-
-		RepositorioPersona.modificarPersona(persona2);
+	private static void modificarPersona(Integer idPersona, String nombre) {
+		RepositorioPersona.modificarPersona(idPersona, nombre);
 	}
 
+	private static void modificarCliente() {
+		RepositorioPersona.modificarPersona(2, "ClienteModificado");
+	}
+
+	// private static void modificarPersona2() {
+	// final Persona persona2 = new Persona();
+	// persona2.setIdPersona(1);
+	// persona2.setNombre("Iván2");
+	// persona2.setApellidos("Quesada2");
+	// persona2.setEdad(192);
+	// persona2.setEstadoCivil(EstadoCivil.CASADO);
+	// persona2.setDni("00000000K");
+	//
+	// RepositorioPersona.modificarPersona(persona2);
+	// }
+	//
 	private static void eliminarPersona() {
 		RepositorioPersona.eliminarPersona(1);
 	}
 
-	// private static void consultaPersona(String nombre) {
-	// final List<Persona> personas = RepositorioPersona.consulta(nombre);
-	//
-	// System.out.println();
-	// }
+	private static void eliminarCliente() {
+		RepositorioCliente.eliminarCliente(2);
+	}
+
+	private static void eliminarUsuario(Integer idUsuario) {
+		RepositorioUsuario.eliminarUsuario(idUsuario);
+	}
+
+	private static void consultaPersona(String nombre, String apellidos, String dni, EstadoCivil estadoCivil,
+			String login) {
+		final List<Persona> personas = RepositorioPersona.consulta(nombre, apellidos, dni, estadoCivil, login);
+
+		System.out.println(personas.size());
+	}
+
+	private static void consultaCliente(String nombre, String apellidos, String dni, EstadoCivil estadoCivil,
+			String login) {
+		final List<Persona> personas = RepositorioPersona.consulta(nombre, apellidos, dni, estadoCivil, login);
+
+		System.out.println(personas.size());
+	}
 
 	// private static Integer crearVehiculo() {
 	//
