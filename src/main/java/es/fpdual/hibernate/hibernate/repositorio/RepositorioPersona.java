@@ -129,14 +129,13 @@ public class RepositorioPersona {
 		}
 	}
 
-	public static Persona consultaNombreCompleto(Integer idPersona) {
+	public static Persona consultaPorCodigo(Integer idPersona) {
 		final Session sesion = HibernateUtil.getMiFactoria().getCurrentSession();
 
 		try {
 			sesion.beginTransaction();
 
-			return (Persona) sesion.createQuery("from Persona where per_id = :idPersona")
-					.setParameter("idPersona", idPersona).uniqueResult();
+			return (Persona) sesion.createQuery("from Persona ").uniqueResult();
 
 		} catch (Exception e) {
 			System.out.println("Se ha producido un error" + e.getMessage());

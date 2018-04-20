@@ -44,6 +44,9 @@ public class Direccion {
 	@ManyToMany(mappedBy = "direcciones")
 	private List<Persona> personas = new ArrayList<>();
 
+	public Direccion() {
+	}
+
 	public Integer getIdDireccion() {
 		return idDireccion;
 	}

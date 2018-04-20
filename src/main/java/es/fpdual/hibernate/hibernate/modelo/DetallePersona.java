@@ -1,11 +1,13 @@
 package es.fpdual.hibernate.hibernate.modelo;
 
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+@Entity(name = "DetallePersona")
 public class DetallePersona {
 
 	@Id

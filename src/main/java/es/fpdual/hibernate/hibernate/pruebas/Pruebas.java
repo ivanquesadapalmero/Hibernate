@@ -7,6 +7,7 @@ import es.fpdual.hibernate.hibernate.modelo.Cliente;
 import es.fpdual.hibernate.hibernate.modelo.DetallePersona;
 import es.fpdual.hibernate.hibernate.modelo.Direccion;
 import es.fpdual.hibernate.hibernate.modelo.EstadoCivil;
+import es.fpdual.hibernate.hibernate.modelo.Genero;
 import es.fpdual.hibernate.hibernate.modelo.Persona;
 import es.fpdual.hibernate.hibernate.modelo.Telefono;
 import es.fpdual.hibernate.hibernate.repositorio.RepositorioCliente;
@@ -18,6 +19,11 @@ public class Pruebas {
 	public static void main(String[] args) {
 		//
 		crearPersona("00000000A", "persona");
+
+		Persona persona = consultarPorCodigo(1);
+		System.out.println(persona.getGenero());
+		System.out.println(persona.getTelefonos());
+
 		// crearCliente("11111111B", "cliente");
 
 		// crearCliente("33333333B", "cliente2");
@@ -45,6 +51,7 @@ public class Pruebas {
 		persona.setLogin(login);
 		persona.setFechaAlta(new Date());
 		persona.setPassword("ivan");
+		persona.setGenero(Genero.MASCULINO);
 
 		final Direccion direccion1 = new Direccion();
 		direccion1.setProvincia("Sevilla");
@@ -56,6 +63,14 @@ public class Pruebas {
 
 		final Telefono telefono1 = new Telefono();
 		telefono1.setNumero("999999999");
+		telefono1.setPersona(persona);
+
+		final Telefono telefono2 = new Telefono();
+		telefono2.setNumero("888888888");
+		telefono2.setPersona(persona);
+
+		persona.añadirTelefono(telefono1);
+		persona.añadirTelefono(telefono2);
 
 		DetallePersona detalle1 = new DetallePersona();
 		detalle1.setHijos(false);
@@ -64,10 +79,15 @@ public class Pruebas {
 
 		persona.añadirTelefono(telefono1);
 		persona.añadirDireccion(direccion1);
-		persona.añadirTelefono(telefono1);
+		persona.añadirTelefono(telefono2);
+
 		persona.añadirDetalle(detalle1);
 
 		return RepositorioPersona.crearPersona(persona);
+	}
+
+	private static Persona consultarPorCodigo(Integer codigo) {
+		return RepositorioPersona.consultaPorCodigo(codigo);
 	}
 
 	private static Integer crearCliente(String dni, String login) {
